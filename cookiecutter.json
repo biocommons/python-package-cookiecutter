@@ -1,52 +1,36 @@
 {
-  "author": "Florian Maas",
-  "email": "fpgmaas@gmail.com",
-  "author_github_handle": "fpgmaas",
-  "project_name": "example-project",
+  "author": "Biocommons Contributors",
+  "email": "biocommons-devs@googlegroups.com",
+  "author_github_handle": "biocommons",
+  "project_name": "python-package",
   "project_slug": "{{cookiecutter.project_name|lower|replace('-', '_')}}",
-  "project_description": "This is a template repository for Python projects that use uv for their dependency management.",
-  "layout": [
-    "flat",
-    "src"
-  ],
+  "project_description": "Package Description",
+  "layout": "src",
   "include_github_actions": [
-    "y",
-    "n"
+    "y"
   ],
   "publish_to_pypi": [
-    "y",
-    "n"
+    "y"
   ],
   "deptry": [
-    "y",
-    "n"
+    "y"
   ],
   "mkdocs": [
-    "y",
-    "n"
+    "y"
   ],
   "codecov": [
-    "y",
-    "n"
+    "y"
   ],
   "dockerfile": [
-    "y",
-    "n"
+    "y"
   ],
   "devcontainer": [
-    "y",
-    "n"
+    "y"
   ],
   "type_checker": [
-    "mypy",
     "ty"
   ],
   "open_source_license": [
-    "MIT license",
-    "BSD license",
-    "ISC license",
-    "Apache Software License 2.0",
-    "GNU General Public License v3",
-    "Not open source"
+    "Apache Software License 2.0"
   ]
 }
