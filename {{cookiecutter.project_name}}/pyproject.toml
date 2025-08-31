@@ -1,145 +1,190 @@
-[project]
-name = "{{cookiecutter.project_name}}"
-version = "0.0.1"
-description = "{{cookiecutter.project_description}}"
-authors = [{ name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" }]
-readme = "README.md"
-keywords = ['python']
-requires-python = ">=3.9,<4.0"
-classifiers = [
-    "Intended Audience :: Developers",
-    "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
-
-[project.urls]
-Homepage = "https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/"
-Repository = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"
-Documentation = "https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/"
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = ["setuptools >= 70.1", "setuptools_scm[toml] ~= 8.1"]
 
 [dependency-groups]
 dev = [
-    "pytest>=7.2.0",
-    "pre-commit>=2.20.0",
-    "tox-uv>=1.11.3",
-    {% if cookiecutter.deptry == 'y' %}"deptry>=0.23.0",{% endif %}
-    {% if cookiecutter.type_checker == "mypy" -%}
-        "mypy>=0.991",
-    {%- elif cookiecutter.type_checker == "ty" -%}
-        "ty>=0.0.1a16",
-    {%- endif %}
-    {% if cookiecutter.codecov == 'y' %}"pytest-cov>=4.0.0",{% endif %}
-    "ruff>=0.11.5",
-    {% if cookiecutter.mkdocs == 'y' %}"mkdocs>=1.4.2",
-    "mkdocs-material>=8.5.10",
-    "mkdocstrings[python]>=0.26.1",{% endif %}
+  "deptry>=0.23",
+  "mkdocs-material>=9.6",
+  "mkdocs>=1.6",
+  "mkdocstrings[python]>=0.30",
+  "mypy>=1.17",
+  "pre-commit>=3.8",
+  "pytest-cov>=4.1",
+  "pytest>=7.4",
+  "ruff>=0.12",
+  "tox-uv>=1.28"
 ]
 
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-{% if cookiecutter.layout == "src" -%}
-[tool.hatch.build.targets.wheel]
-packages = ["src/{{cookiecutter.project_slug}}"]
-{%- else -%}
-[tool.hatch.build.targets.wheel]
-packages = ["{{cookiecutter.project_slug}}"]
-{%- endif %}
-
-{% if cookiecutter.type_checker == "mypy" -%}
-[tool.mypy]
-files = [
-    {%- if cookiecutter.layout == "src" -%}
-    "src"
-    {%- else -%}
-    "{{cookiecutter.project_slug}}"
-    {%- endif -%}
+[project]
+authors = [{ name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" }]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python",
+  "Topic :: Software Development :: Libraries :: Python Modules"
 ]
-disallow_untyped_defs = true
-disallow_any_unimported = true
-no_implicit_optional = true
-check_untyped_defs = true
-warn_return_any = true
-warn_unused_ignores = true
-show_error_codes = true
-{%- else -%}
-[tool.ty.environment]
-python = "./.venv"
-python-version = "3.9"
-{%- endif %}
+dependencies = []
+description = "{{cookiecutter.project_description}}"
+dynamic = ["version"]
+license = "Apache-2.0"
+name = "{{cookiecutter.project_name}}"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+example = [
+  "pyyaml"
+]
+
+[project.scripts]
+marvin-quote = "biocommons.example.__main__:main"
+
+[project.urls]
+Documentation = "https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/"
+Homepage = "https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/"
+Issues = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"/issues
+Repository = "https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}"
+
+[tool.coverage]
+
+[tool.coverage.report]
+exclude_lines = [
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  # Don't complain if non-runnable code isn't run:
+  "if __name__ == .__main__.:",
+  "if self.debug",
+  # Have to re-enable the standard pragma
+  "pragma: no cover",
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError"
+]
+show_missing = true
+skip_empty = true
+
+[tool.coverage.run]
+branch = true
+omit = ["*/test/*", "*/tests/*", "*_test.py"]
+source = ["src"]
+
+[tool.deptry]
+
+[tool.deptry.package_module_name_map]
+# map package name to import name
+# Making this explicit suppresses deptry notices
+coloredlogs = "coloredlogs"
+mkdocs = "mkdocs"
+mkdocs-material = "mkdocs_material"
+mkdocstrings = "mkdocstrings"
+mypy = "mypy"
+pre-commit = "pre_commit"
+pytest = "pytest"
+pytest-cov = "pytest_cov"
+pyyaml = "yaml"
+ruff = "ruff"
+tox-uv = "tox_uv"
+ty = "ty"
 
 [tool.pytest.ini_options]
+addopts = "-s -v -x --strict-markers -m 'not extra' --doctest-modules --cov=src"
+doctest_optionflags = [
+  "ALLOW_BYTES",
+  "ALLOW_UNICODE",
+  "ELLIPSIS",
+  "IGNORE_EXCEPTION_DETAIL",
+  "NORMALIZE_WHITESPACE"
+]
+markers = [
+  "network: tests that require network connectivity",
+  "slow: slow tests that should be run infrequently"
+]
 testpaths = ["tests"]
 
 [tool.ruff]
-target-version = "py39"
-line-length = 120
 fix = true
+line-length = 100
+src = ["src", "tests"]
+target-version = "py39"
+
+[tool.ruff.format]
+docstring-code-format = true
+preview = true
+quote-style = "double"
 
 [tool.ruff.lint]
-select = [
-    # flake8-2020
-    "YTT",
-    # flake8-bandit
-    "S",
-    # flake8-bugbear
-    "B",
-    # flake8-builtins
-    "A",
-    # flake8-comprehensions
-    "C4",
-    # flake8-debugger
-    "T10",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
-    # mccabe
-    "C90",
-    # pycodestyle
-    "E", "W",
-    # pyflakes
-    "F",
-    # pygrep-hooks
-    "PGH",
-    # pyupgrade
-    "UP",
-    # ruff
-    "RUF",
-    # tryceratops
-    "TRY",
+fixable = [
+  "B",
+  "C4",
+  "D",
+  "EM",
+  "F401",
+  "F541",
+  "I",
+  "PERF",
+  "PIE",
+  "PT",
+  "RET",
+  "RSE",
+  "RUF",
+  "SIM",
+  "UP"
 ]
 ignore = [
-    # LineTooLong
-    "E501",
-    # DoNotAssignLambda
-    "E731",
+  "E111",
+  "E114",
+  "E117",
+  "E501",
+  "E731",
+  "PLR0913",
+  "S321",
+  "W191"
+]
+select = [
+  "A", # https://docs.astral.sh/ruff/rules/#flake8-builtins-a
+  "ARG", # https://docs.astral.sh/ruff/rules/#flake8-unused-arguments-arg
+  "B", # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+  "C4", # https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
+  "DTZ", # https://docs.astral.sh/ruff/rules/#flake8-datetimez-dtz
+  "E",
+  "EM", # https://docs.astral.sh/ruff/rules/#flake8-errmsg-em
+  "F", # https://docs.astral.sh/ruff/rules/#pyflakes-f
+  "G", # https://docs.astral.sh/ruff/rules/#flake8-logging-format-g
+  "I", # https://docs.astral.sh/ruff/rules/#isort-i
+  "LOG", # https://docs.astral.sh/ruff/rules/#flake8-logging-log
+  "N", # https://docs.astral.sh/ruff/rules/#pep8-naming-n
+  "PERF", # https://docs.astral.sh/ruff/rules/#perflint-perf
+  "PIE", # https://docs.astral.sh/ruff/rules/#flake8-pie-pie
+  "PL", # https://docs.astral.sh/ruff/rules/#pylint-pl
+  "PT", # https://docs.astral.sh/ruff/rules/#flake8-pytest-style-pt
+  "PTH", # https://docs.astral.sh/ruff/rules/#flake8-use-pathlib-pth
+  "RET", # https://docs.astral.sh/ruff/rules/#flake8-return-ret
+  "RSE", # https://docs.astral.sh/ruff/rules/#flake8-raise-rse
+  "RUF", # https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
+  "S", # https://docs.astral.sh/ruff/rules/#flake8-bandit-s
+  "SIM", # https://docs.astral.sh/ruff/rules/#flake8-simplify-sim
+  "TRY", # https://docs.astral.sh/ruff/rules/#tryceratops-try
+  "UP", # https://docs.astral.sh/ruff/rules/#pyupgrade-up
+  "W", # https://docs.astral.sh/ruff/rules/#pycodestyle-e-w
+  "YTT" # https://docs.astral.sh/ruff/rules/#flake8-2020-ytt
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
 
-[tool.ruff.format]
-preview = true
+[tool.setuptools]
+include-package-data = true
 
-{% if cookiecutter.codecov == "y" -%}
-[tool.coverage.report]
-skip_empty = true
+[tool.setuptools.package-data]
+"*" = ["*.gz", "*.json", "*.yaml"]
 
-[tool.coverage.run]
-branch = true
-source = [
-    {%- if cookiecutter.layout == "src" -%}
-    "src"
-    {%- else -%}
-    "{{cookiecutter.project_slug}}"
-    {%- endif -%}
-]
-{% endif %}
+[tool.setuptools.packages.find]
+exclude = ["*.pyc", "__pycache__"]
+namespaces = true
+where = ["src"]
+
+[tool.setuptools_scm]
