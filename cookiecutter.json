@@ -2,8 +2,10 @@
   "author": "Biocommons Contributors",
   "email": "biocommons-devs@googlegroups.com",
   "author_github_handle": "biocommons",
-  "project_name": "python-package",
-  "project_slug": "{{cookiecutter.project_name|lower|replace('-', '_')}}",
+  "namespace": "biocommons",
+  "module_name": "my_module",
+  "project_slug": "{{ cookiecutter.namespace }}.{{ cookiecutter.module_name }}",
+  "project_name": "{{ cookiecutter.namespace }}-{{ cookiecutter.module_name }}",
   "project_description": "Package Description",
   "layout": "src",
   "include_github_actions": [

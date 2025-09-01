@@ -8,70 +8,96 @@
 
 {{cookiecutter.project_description}}
 
+This project is a product of the [biocommons](https://biocommons.org/) community.
+
 - **Github repository**: <https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/>
 - **Documentation** <https://{{cookiecutter.author_github_handle}}.github.io/{{cookiecutter.project_name}}/>
 
-## Getting started with your project
+- **Github repository**: <https://github.com/biocommons/python-package/>
+- **Documentation** <https://biocommons.github.io/python-package/>
 
-### 1. Create a New Repository
+## Python Package Installation
 
-First, create a repository on GitHub with the same name as this project, and then run the following commands:
+Install from PyPI with `pip install biocommons.example` or `uv pip install biocommons.example`, then try it:
 
-```bash
-git init -b main
-git add .
-git commit -m "init commit"
-git remote add origin git@github.com:{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}.git
-git push -u origin main
-```
+    $ source venv/bin/activate
 
-### 2. Set Up Your Development Environment
+    $ python3 -m biocommons.example
+    Marvin says:
+    There's only one life-form as intelligent as me within thirty parsecs...
 
-Then, install the environment and the pre-commit hooks with
+    $ marvin-quote
+    Marvin says:
+    You think you've got problems? What are you supposed to do if you...
 
-```bash
-make install
-```
+    $ ipython
+    >>> from biocommons.example import __version__, get_quote_from_marvin
+    >>> __version__
+    '0.1.dev8+gd5519a8.d20211123'
+    >>> get_quote()
+    "The first ten million years were the worst, ...
 
-This will also generate your `uv.lock` file
 
-### 3. Run the pre-commit hooks
+## Developer Setup
 
-Initially, the CI/CD pipeline might be failing due to formatting issues. To resolve those run:
+### Install Prerequisites
 
-```bash
-uv run pre-commit run -a
-```
+These tools are required to get started:
 
-### 4. Commit the changes
+- [git](https://git-scm.com/): Version control system
+- [GNU make](https://www.gnu.org/software/make/): Current mechanism for consistent invocation of developer tools.
+- [uv](https://docs.astral.sh/uv/): An extremely fast Python package and project manager, written in Rust.
 
-Lastly, commit the changes made by the two steps above to your repository.
+#### MacOS or Linux Systems
 
-```bash
-git add .
-git commit -m 'Fix formatting issues'
-git push origin main
-```
+- [Install brew](https://brew.sh/)
+- `brew install git make uv`
 
-You are now ready to start development on your project!
-The CI/CD pipeline will be triggered when you open a pull request, merge to main, or when you create a new release.
+#### Linux (Debian-based systems)
 
-To finalize the set-up for publishing to PyPI, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/publishing/#set-up-for-pypi).
-For activating the automatic documentation with MkDocs, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/mkdocs/#enabling-the-documentation-on-github).
-To enable the code coverage reports, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/codecov/).
+You may also install using distribution packages:
 
-## Releasing a new version
+    sudo apt install git make
 
-{% if cookiecutter.publish_to_pypi == "y" -%}
+Then install uv using the [uv installation instructions](https://docs.astral.sh/uv/getting-started/installation/).
 
-- Create an API Token on [PyPI](https://pypi.org/).
-- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/settings/secrets/actions/new).
-- Create a [new release](https://github.com/{{cookiecutter.author_github_handle}}/{{cookiecutter.project_name}}/releases/new) on Github.
-- Create a new tag in the form `*.*.*`.
+### One-time developer setup
 
-For more details, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/cicd/#how-to-trigger-a-release).
-{%- endif %}
+Create a Python virtual environment, install dependencies, install pre-commit hooks, and install an editable package:
 
----
+    make devready
 
-Repository initiated with [fpgmaas/cookiecutter-uv](https://github.com/fpgmaas/cookiecutter-uv).
+### Development
+
+**N.B.** Developers are strongly encouraged to use `make` to invoke tools to
+ensure consistency with the CI/CD pipelines.  Type `make` to see a list of
+supported targets.  A subset are listed here:
+
+    » make
+    🌟🌟 biocommons conventional make targets 🌟🌟
+
+    Using these targets promots consistency between local development and ci/cd commands.
+
+    usage: make [target ...]
+
+    BASIC USAGE
+    help                Display help message
+
+    SETUP, INSTALLATION, PACKAGING
+    devready            Prepare local dev env: Create virtual env, install the pre-commit hooks
+    build               Build package
+    publish             publish package to PyPI
+
+    FORMATTING, TESTING, AND CODE QUALITY
+    cqa                 Run code quality assessments
+    test                Test the code with pytest
+
+    DOCUMENTATION
+    docs-serve          Build and serve the documentation
+    docs-test           Test if documentation can be built without warnings or errors
+
+    CLEANUP
+    clean               Remove temporary and backup files
+    cleaner             Remove files and directories that are easily rebuilt
+    cleanest            Remove all files that can be rebuilt
+    distclean           Remove untracked files and other detritus
